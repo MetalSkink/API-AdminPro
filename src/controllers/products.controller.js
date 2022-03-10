@@ -43,7 +43,7 @@ export const updateProductById = async(req, res) =>{
     try {
         const producto = await Product.findById(productId);
         if(!producto){
-            res.status(404).json({
+            return res.status(404).json({
                 ok: false,
                 msg: 'El producto no existe'
             });
@@ -66,7 +66,7 @@ export const deleteProductById = async(req, res) =>{
     try {
         const producto = await Product.findById(productId);
         if(!producto){
-            res.status(404).json({
+            return res.status(404).json({
                 ok: false,
                 msg: 'El producto no existe'
             });
