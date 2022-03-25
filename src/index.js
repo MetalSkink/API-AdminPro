@@ -3,6 +3,7 @@ import cors from "cors";
 import { dbConnection } from './db/config'
 import productRoutes from './routes/products.routes'
 import authRoutes from './routes/auth.routes'
+import userRoutes from "./routes/user.routes";
 import { createRoles } from "./helpers/initialSetup";
 require('dotenv').config();
 
@@ -26,7 +27,7 @@ app.use(express.json());
 //Rutas
 app.use('/products', productRoutes);
 app.use('/auth', authRoutes);
-// app.use('/users', userRoutes);
+app.use('/users', userRoutes);
 
 // ----------------------- //
 

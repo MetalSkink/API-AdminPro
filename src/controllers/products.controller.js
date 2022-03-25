@@ -21,8 +21,26 @@ export const createProduct = async(req, res) =>{
 }
 
 export const getProducts = async(req, res) =>{
-    const products = await Product.find();
-    res.json(products)
+    const {page = 1, limit = 5 } = req.query;
+    try {
+        console.log(page,limit);
+        const products = await Product.find()
+            .limit(limit*1)
+            .skip((page -1) * limit)
+            .exec();
+            
+        const count = await Product.countDocuments();
+
+        return res.json({
+            products,
+            totalPages: Math.ceil(count/limit),
+            currentPage: page
+        });
+    } catch (error) {
+        console.error(error)
+    }
+    // const products = await Product.find();
+    // return res.json(products)
 }
 
 export const getProductById = async(req, res) =>{
