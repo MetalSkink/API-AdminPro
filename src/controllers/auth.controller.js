@@ -81,12 +81,16 @@ export const loginUsuario = async(req, res= response)=> {
             });
         }
 
+        const rolesFoundByObjectId = await Role.find({_id: {$in: dbUser.roles}});
+        const rolesFinales = rolesFoundByObjectId.map(role => role.name);
+
         // Generar el JWT
         const token = await generarJWT(dbUser.id,dbUser.name);
         return res.json({
             ok:true,
             uid: dbUser.id,
             name: dbUser.name,
+            roles: rolesFinales,
             email,
             msg: 'Usuario Logeado Exitosamente',
             token

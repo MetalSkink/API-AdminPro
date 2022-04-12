@@ -1,10 +1,51 @@
 import { response } from "express";
 import User from "../models/User";
 
-export const createUser = (req,res=response) =>{
-    res.json({
-        message:"creando usuario"
-    })
+export const createUser = async(req,res=response) =>{
+    const {email, name, password, roles} = req.body;
+
+    try {
+        const usuario = await User.findOne({email});
+        if (usuario) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Este correo ya esta siendo utilizado'
+            });
+        }
+        // Crear el usuario con el modelo
+        const dbUser = new User(req.body);
+
+        if (roles) {
+            const foundRoles = await Role.find({name: {$in: roles}})
+            dbUser.roles = foundRoles.map(role => role._id)
+        }else{
+            const role = await Role.findOne({name: "user"})
+            dbUser.roles = [role._id];
+        }
+
+        //Hashear la contraseña
+        const salt = bcrypt.genSaltSync();
+        dbUser.password = bcrypt.hashSync(password, salt);
+
+        //Guardamos el usuario en la BD
+        const savedUser = await dbUser.save();
+
+        //Generamos respuesta exitosa
+        return res.status(201).json({
+            ok: true,
+            uid: savedUser._id,
+            name,
+            email,
+            msg: 'Usuario creado Exitosamente como Admin',
+        });
+
+
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: 'Porfavor hable con el admin'
+        });
+    }
 }
 
 export const getUsuarios = async(req, res=response) => {
@@ -48,7 +89,7 @@ export const updateUser = async( req, res=response) => {
 export const deleteUsuario = async(req, res= response) => {
     const { userId } = req.params;
     try {
-        const user = await Product.findById(userId);
+        const user = await User.findById(userId);
         if(!user){
             return res.status(404).json({
                 ok: false,

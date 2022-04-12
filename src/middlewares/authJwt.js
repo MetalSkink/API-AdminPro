@@ -19,7 +19,6 @@ export const verifyToken = async(req,res=response,next) => {
 
         const user = await User.findById(decoded.uid, {password: 0})
         if (!user) return res.status(404).json({message: 'no user found'})
-        console.log(decoded);
 
         next();
     } catch (error) {

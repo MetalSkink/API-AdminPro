@@ -23,7 +23,6 @@ export const createProduct = async(req, res) =>{
 export const getProducts = async(req, res) =>{
     const {page = 1, limit = 5 } = req.query;
     try {
-        console.log(page,limit);
         const products = await Product.find()
             .limit(limit*1)
             .skip((page -1) * limit)
@@ -39,8 +38,6 @@ export const getProducts = async(req, res) =>{
     } catch (error) {
         console.error(error)
     }
-    // const products = await Product.find();
-    // return res.json(products)
 }
 
 export const getProductById = async(req, res) =>{
