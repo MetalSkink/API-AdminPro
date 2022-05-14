@@ -87,8 +87,42 @@ export const deleteProductById = async(req, res) =>{
             });
         }
         await Product.findByIdAndDelete(productId);
-        res.status(204).json();
+        res.status(200).json(
+            producto
+        );
         
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Porfavor hable con el administrador'
+        })
+    }
+}
+
+export const getCategories = async(req, res) =>{
+    try {
+        const categories = await Product.distinct('category')
+        res.status(200).json(categories)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Porfavor hable con el administrador'
+        })
+    }
+}
+
+export const getDataChart = async(req, res) =>{
+    try {
+        const videojuegos = await Product.find({"category": "Videojuegos"}).count()
+        const manga = await Product.find({"category": "Manga"}).count()
+        const comic = await Product.find({"category": "Comic"}).count()
+        res.status(200).json({
+            videojuegos,
+            manga,
+            comic
+        })
     } catch (error) {
         console.log(error);
         res.status(500).json({

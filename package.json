@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src --out-dir build",
     "dev": "nodemon --exec npx babel-node src/index.js",
-    "start": "node build/index.js"
+    "start": "npx babel-node src/index.js"
   },
   "keywords": [],
   "author": "Xavier Ortega",

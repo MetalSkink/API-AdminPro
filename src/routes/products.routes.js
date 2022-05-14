@@ -10,6 +10,9 @@ router.post('/',[
     isModerator
 ], productsCtrl.createProduct)
 
+router.get('/categories', productsCtrl.getCategories);
+router.get('/data', productsCtrl.getDataChart);
+
 router.get('/', productsCtrl.getProducts)
 
 router.get('/:productId', productsCtrl.getProductById)
@@ -23,5 +26,6 @@ router.put('/:productId',[
     verifyToken,
     isAdmin
 ] ,productsCtrl.updateProductById)
+
 
 export default router;
